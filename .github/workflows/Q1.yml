@@ -6,7 +6,7 @@ permissions:
 on:
   push:
     branches:
-      - main  # Déclenche le workflow sur les commits vers la branche main
+      - matser  # Déclenche le workflow sur les commits vers la branche main
   workflow_dispatch:  # Permet de déclencher manuellement le workflow
 
 jobs:

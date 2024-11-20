@@ -21,28 +21,20 @@ jobs:
       # 2. Crée un fichier Q3.java
       - name: Create Q3.java
         run: |
-          echo 'public class Q3 {' > Q3.java
-          echo '    public static void main(String[] args) {' >> Q3.java
-          echo '        if (args.length != 1) {' >> Q3.java
-          echo '            System.out.println("Veuillez fournir un nombre en argument.");' >> Q3.java
-          echo '            return;' >> Q3.java
-          echo '        }' >> Q3.java
-          echo '' >> Q3.java
-          echo '        int n;' >> Q3.java
-          echo '        try {' >> Q3.java
-          echo '            n = Integer.parseInt(args[0]);' >> Q3.java
-          echo '        } catch (NumberFormatException e) {' >> Q3.java
-          echo '            System.out.println("Argument invalide. Veuillez fournir un nombre entier.");' >> Q3.java
-          echo '            return;' >> Q3.java
-          echo '        }' >> Q3.java
-          echo '' >> Q3.java
-          echo '        for (int i = 0; i < n; i++) {' >> Q3.java
-          echo '            System.out.print("*");' >> Q3.java
-          echo '        }' >> Q3.java
-          echo '        System.out.println();' >> Q3.java
-          echo '    }' >> Q3.java
-          echo '}' >> Q3.java
+          cat <<EOL > Q3.java
+           public class Q3 {
 
+              public static void main(String[] args) {
+                String ligne = "";
+                int nbetoile = Integer.parseInt(args[0]);
+                for (int i = 0; i < nbetoile; i++) {
+                  ligne += "*";
+                }
+                System.out.println(ligne);
+              }
+            }
+          EOL
+          
       # 3. Crée un fichier Q3_archive_java.txt avec votre nom et prénom et le contenu de Q3.java
       - name: Create Q3_archive_java.txt
         run: |

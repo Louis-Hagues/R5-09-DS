@@ -19,6 +19,11 @@ jobs:
       run: |
         cp README.md Q1_archive_README.md
 
+    - name: Configurer Git
+      run: |
+          git config --global user.name Louis-Hagues
+          git config --global user.email louis.hagues@gmail.com
+
     # 4. Ajoutez et poussez le fichier
     - name: Commit and push changes
       run: |

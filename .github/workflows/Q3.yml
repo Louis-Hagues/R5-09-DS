@@ -1,0 +1,66 @@
+name: Q3
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Permet de déclencher manuellement le workflow
+
+jobs:
+  create-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Clone le dépôt
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Crée un fichier Q3.java
+      - name: Create Q3.java
+        run: |
+          echo 'public class Q3 {' > Q3.java
+          echo '    public static void main(String[] args) {' >> Q3.java
+          echo '        if (args.length != 1) {' >> Q3.java
+          echo '            System.out.println("Veuillez fournir un nombre en argument.");' >> Q3.java
+          echo '            return;' >> Q3.java
+          echo '        }' >> Q3.java
+          echo '' >> Q3.java
+          echo '        int n;' >> Q3.java
+          echo '        try {' >> Q3.java
+          echo '            n = Integer.parseInt(args[0]);' >> Q3.java
+          echo '        } catch (NumberFormatException e) {' >> Q3.java
+          echo '            System.out.println("Argument invalide. Veuillez fournir un nombre entier.");' >> Q3.java
+          echo '            return;' >> Q3.java
+          echo '        }' >> Q3.java
+          echo '' >> Q3.java
+          echo '        for (int i = 0; i < n; i++) {' >> Q3.java
+          echo '            System.out.print("*");' >> Q3.java
+          echo '        }' >> Q3.java
+          echo '        System.out.println();' >> Q3.java
+          echo '    }' >> Q3.java
+          echo '}' >> Q3.java
+
+      # 3. Crée un fichier Q3_archive_java.txt avec votre nom et prénom et le contenu de Q3.java
+      - name: Create Q3_archive_java.txt
+        run: |
+          echo "Nom et prénom : Louis-Hagues" > Q3_archive_java.txt
+          echo "\n--- Contenu de Q3.java ---\n" >> Q3_archive_java.txt
+          cat Q3.java >> Q3_archive_java.txt
+
+      # 4. Configure Git
+      - name: Configure Git
+        run: |
+          git config --global user.name "Louis-Hagues"
+          git config --global user.email "louis.hagues@gmail.com"
+
+      # 5. Ajoute et pousse le fichier Q3_archive_java.txt
+      - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git add Q3.java Q3_archive_java.txt
+          git commit -m "Add Q3.java and Q3_archive_java.txt"
+          git push origin main

@@ -1,0 +1,83 @@
+name: Q6
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Permet de déclencher manuellement le workflow
+
+jobs:
+  create-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Clone le dépôt
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Crée le fichier Q6.java
+      - name: Create Q56_archive_date.txt with content from Q6.java
+        run: |
+          # Vérifie si Q6.java existe dans le dépôt
+          if [ -f Q6.java ]; then
+            echo "Nom et prénom : Louis Hagues" > Q6_archive_java.txt
+            echo "\n--- Contenu de Q6.java ---\n" >> Q6_archive_java.txt
+            cat Q6.java >> Q6_archive_java.txt  # Récupère le contenu de Q6.java et l'ajoute à Q6_archive_date.txt
+          else
+            echo "Erreur : Q6.java n'a pas été trouvé dans le dépôt." > Q6_archive_java.txt
+          fi
+
+      # 3. Obtenez la date actuelle et formatez-la au format JJ-MM-AAAA-HHMMSS
+      - name: Get current date
+        id: date
+        run: |
+          # Date au format JJ-MM-AAAA-HHMMSS
+          DATE=$(date +'%d-%m-%Y-%H%M%S')
+          echo "DATE=$DATE" >> $GITHUB_ENV
+
+      # 4. Crée le fichier Q6_archive_date.txt avec votre nom, prénom et le contenu de Q6.java
+      - name: Create Q6_archive_${{ env.DATE }}.txt
+        run: |
+          FILENAME="Q6_archive_${{ env.DATE }}.txt"
+          echo "Nom et prénom : Louis-Hagues" > $FILENAME
+          echo "\n--- Contenu de Q6.java ---\n" >> $FILENAME
+          cat Q6.java >> $FILENAME
+          echo "\n--- Taille du fichier Q6.java ---" >> $FILENAME
+          wc -l Q6.java >> $FILENAME  # Nombre de lignes
+          wc -c Q6.java >> $FILENAME  # Nombre de caractères
+
+      # 5. Configure Git
+      - name: Configure Git
+        run: |
+          git config --global user.name "Louis-Hagues"
+          git config --global user.email "louis.hagues@gmail.com"
+
+      # 6. Effectuer un pull pour récupérer les dernières modifications
+      - name: Pull latest changes from the remote repository
+        run: |
+          git pull origin main
+
+      # 7. Vérifier si le fichier précédent existe et générer le diff
+      - name: Generate diff between current and previous Q6 archive
+        run: |
+          LAST_FILE=$(ls -t Q6_archive_*.txt | head -n 2 | tail -n 1)
+          if [ -n "$LAST_FILE" ]; then
+            DIFF_FILE="Q6_différences.txt"
+            echo "Comparing $LAST_FILE with Q6_archive_${{ env.DATE }}.txt" > $DIFF_FILE
+            diff "$LAST_FILE" "Q6_archive_${{ env.DATE }}.txt" >> $DIFF_FILE
+          fi
+
+      # 8. Commit et push les fichiers créés
+      - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git add "Q6_archive_${{ env.DATE }}.txt"
+          if [ -f "Q6_différences.txt" ]; then
+            git add "Q6_différences.txt"
+          fi
+          git commit -m "Add Q6_archive_${{ env.DATE }}.txt and Q6_différences.txt"
+          git push origin main

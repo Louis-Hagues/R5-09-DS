@@ -1,0 +1,25 @@
+Nom et prénom : Louis-Hagues
+\n--- Contenu de Q4.java ---\n
+public class Q4 {
+    public static void main(String[] args) {
+        if (args.length != 1) {
+            System.out.println("Veuillez fournir un nombre en argument.");
+            return;
+        }
+
+        int n;
+        try {
+            n = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {
+            System.out.println("Argument invalide. Veuillez fournir un nombre entier.");
+            return;
+        }
+
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j < i; j++) {
+                System.out.print("*");
+            }
+            System.out.println();
+        }
+    }
+}

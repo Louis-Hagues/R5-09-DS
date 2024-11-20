@@ -1,4 +1,4 @@
-Nom et prénom : Louis-Hagues
+Nom et prénom : Louis Hagues
 \n--- Contenu de Q3.java ---\n
  public class Q3 {
 

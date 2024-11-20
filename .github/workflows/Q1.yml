@@ -41,4 +41,4 @@ jobs:
         run: |
           git add Q1_archive_README.md
           git commit -m "Add Q1_archive_README.md"
-          git push origin main
+          git push origin master

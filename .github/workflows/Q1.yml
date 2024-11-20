@@ -19,12 +19,6 @@ jobs:
       run: |
         cp README.md Q1_archive_README.md
 
-    # 3. Configurez Git
-    - name: Configure Git
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
     # 4. Ajoutez et poussez le fichier
     - name: Commit and push changes
       run: |

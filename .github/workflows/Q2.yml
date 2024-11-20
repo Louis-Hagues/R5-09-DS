@@ -1,0 +1,46 @@
+name: Q2
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:  # Permet de déclencher manuellement le workflow
+
+jobs:
+  create-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Clone le dépôt
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Crée un fichier Q2_archive_README.md avec les informations demandées
+      - name: Create Q2_archive_README.md
+        run: |
+          echo "Nom et prénom : Louis-Hagues" > Q2_archive_README.md
+          echo "Date et heure d'exécution : $(date '+%Y-%m-%d %H:%M:%S')" >> Q2_archive_README.md
+          if [ -f README.md ]; then
+            echo -e "\n--- Contenu de README.md ---\n" >> Q2_archive_README.md
+            cat README.md >> Q2_archive_README.md
+          else
+            echo "README.md non trouvé, aucun contenu ajouté." >> Q2_archive_README.md
+          fi
+
+      # 3. Configure Git
+      - name: Configure Git
+        run: |
+          git config --global user.name "Louis-Hagues"
+          git config --global user.email "louis.hagues@gmail.com"
+
+      # 4. Ajoute et pousse le fichier vers le dépôt
+      - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git add Q2_archive_README.md
+          git commit -m "Add Q2_archive_README.md"
+          git push origin master

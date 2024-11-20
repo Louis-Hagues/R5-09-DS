@@ -14,9 +14,9 @@ public class Q5 {
         }
 
         // Affiche un triangle d'étoiles
-        for (int i = n; i >= 1; i++) {
+        for (int i = 1; i <= n; i++) {
             for (int j = 0; j < i; j++) {
-                System.out.print("x");
+                System.out.print("*");
             }
             System.out.println();  // Nouvelle ligne après chaque ligne d'étoiles
         }

@@ -21,8 +21,8 @@ jobs:
       # 2. Crée un fichier Q2_archive_README.md avec les informations demandées
       - name: Create Q2_archive_README.md
         run: |
-          echo "Nom et prénom : Louis-Hagues" > Q2_archive_README.md
-          echo "Date et heure d'exécution : $(date '+%Y-%m-%d %H:%M:%S')" >> Q2_archive_README.md
+          echo "Louis-Hagues \n" > Q2_archive_README.md
+          echo "$(date '+%Y-%m-%d %H:%M:%S')" >> Q2_archive_README.md
           if [ -f README.md ]; then
             echo -e "\n--- Contenu de README.md ---\n" >> Q2_archive_README.md
             cat README.md >> Q2_archive_README.md

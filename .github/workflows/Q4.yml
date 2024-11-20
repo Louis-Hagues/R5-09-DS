@@ -52,7 +52,12 @@ jobs:
           git config --global user.name "Louis-Hagues"
           git config --global user.email "louis.hagues@gmail.com"
 
-      # 6. Ajoute et pousse le fichier créé
+      # 6. Effectuer un pull pour récupérer les dernières modifications
+      - name: Pull latest changes from the remote repository
+        run: |
+          git pull origin master
+
+      # 7. Ajoute et pousse le fichier créé
       - name: Commit and push changes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

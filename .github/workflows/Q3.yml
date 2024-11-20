@@ -55,4 +55,4 @@ jobs:
         run: |
           git add Q3.java Q3_archive_java.txt
           git commit -m "Add Q3.java and Q3_archive_java.txt"
-          git push origin master
+          git push origin master --force

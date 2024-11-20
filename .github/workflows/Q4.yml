@@ -1,0 +1,77 @@
+name: Q4
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:  # Permet de déclencher manuellement le workflow
+
+jobs:
+  create-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Clone le dépôt
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Crée le fichier Q4.java
+      - name: Create Q4.java
+        run: |
+          echo "public class Q4 {" > Q4.java
+          echo "    public static void main(String[] args) {" >> Q4.java
+          echo "        if (args.length != 1) {" >> Q4.java
+          echo "            System.out.println(\"Veuillez fournir un nombre en argument.\");" >> Q4.java
+          echo "            return;" >> Q4.java
+          echo "        }" >> Q4.java
+          echo "" >> Q4.java
+          echo "        int n;" >> Q4.java
+          echo "        try {" >> Q4.java
+          echo "            n = Integer.parseInt(args[0]);" >> Q4.java
+          echo "        } catch (NumberFormatException e) {" >> Q4.java
+          echo "            System.out.println(\"Argument invalide. Veuillez fournir un nombre entier.\");" >> Q4.java
+          echo "            return;" >> Q4.java
+          echo "        }" >> Q4.java
+          echo "" >> Q4.java
+          echo "        for (int i = 1; i <= n; i++) {" >> Q4.java
+          echo "            for (int j = 0; j < i; j++) {" >> Q4.java
+          echo "                System.out.print(\"*\");" >> Q4.java
+          echo "            }" >> Q4.java
+          echo "            System.out.println();" >> Q4.java
+          echo "        }" >> Q4.java
+          echo "    }" >> Q4.java
+          echo "}" >> Q4.java
+
+      # 3. Obtenez la date actuelle et formatez-la au format JJ-MM-AAAA
+      - name: Get current date
+        id: date
+        run: |
+          # Date au format JJ-MM-AAAA
+          DATE=$(date +'%d-%m-%Y')
+          echo "DATE=$DATE" >> $GITHUB_ENV
+
+      # 4. Crée le fichier Q4_archive_date.txt avec votre nom, prénom et le contenu du fichier Q4.java
+      - name: Create Q4_archive_${{ env.DATE }}.txt
+        run: |
+          FILENAME="Q4_archive_${{ env.DATE }}.txt"
+          echo "Nom et prénom : Louis-Hagues" > $FILENAME
+          echo "\n--- Contenu de Q4.java ---\n" >> $FILENAME
+          cat Q4.java >> $FILENAME
+
+      # 5. Configure Git
+      - name: Configure Git
+        run: |
+          git config --global user.name "Louis-Hagues"
+          git config --global user.email "louis.hagues@gmail.com"
+
+      # 6. Ajoute et pousse le fichier créé
+      - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git add "Q4_archive_${{ env.DATE }}.txt"
+          git commit -m "Add Q4_archive_${{ env.DATE }}.txt"
+          git push origin master

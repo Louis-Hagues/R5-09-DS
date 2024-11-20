@@ -1,5 +1,8 @@
 name: Q1
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:

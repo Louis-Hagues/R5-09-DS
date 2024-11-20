@@ -6,30 +6,39 @@ permissions:
 on:
   push:
     branches:
-      - main
+      - main  # Déclenche le workflow sur les commits vers la branche main
+  workflow_dispatch:  # Permet de déclencher manuellement le workflow
 
 jobs:
   create-and-push:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Vérifiez le dépôt (clone le dépôt sur l'instance de runner)
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      # 1. Clone le dépôt
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    # 2. Créez un fichier Q1_archive_README.md contenant le contenu de README.md
-    - name: Create Q1_archive_README.md
-      run: |
-        cp README.md Q1_archive_README.md
+      # 2. Crée un fichier Q1_archive_README.md contenant le contenu de README.md
+      - name: Create Q1_archive_README.md
+        run: |
+          if [ -f README.md ]; then
+            cp README.md Q1_archive_README.md
+          else
+            echo "README.md not found. Creating an empty Q1_archive_README.md"
+            echo "# Q1 Archive" > Q1_archive_README.md
+          fi
 
-    - name: Configurer Git
-      run: |
-          git config --global user.name Louis-Hagues
-          git config --global user.email louis.hagues@gmail.com
+      # 3. Configure Git
+      - name: Configure Git
+        run: |
+          git config --global user.name "Louis-Hagues"
+          git config --global user.email "louis.hagues@gmail.com"
 
-    # 4. Ajoutez et poussez le fichier
-    - name: Commit and push changes
-      run: |
-        git add Q1_archive_README.md
-        git commit -m "Add Q1_archive_README.md"
-        git push
+      # 4. Ajoute et pousse les modifications
+      - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git add Q1_archive_README.md
+          git commit -m "Add Q1_archive_README.md"
+          git push origin main
